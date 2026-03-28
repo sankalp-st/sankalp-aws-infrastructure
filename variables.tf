@@ -1,9 +1,3 @@
-variable "region" {
-  description = "AWS region"
-  type        = string
-  default     = "ap-south-1"
-}
-
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -16,8 +10,7 @@ variable "ami" {
   default     = "ami-0f5ee92e2d63afc18"
 }
 
-variable "bucket_name" {
-  description = "S3 bucket name"
+variable "repo_url" {
+  description = "GitHub repository URL for Node.js application"
   type        = string
-  default     = "sankalp-terraform-demo-12345"
 }
