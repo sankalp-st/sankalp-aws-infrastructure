@@ -1,5 +1,13 @@
 resource "aws_security_group" "sg" {
-  name = "allow_node_app"
+  description = "Allow Node App"
+
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
   ingress {
     from_port   = 3000
