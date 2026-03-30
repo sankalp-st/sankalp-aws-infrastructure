@@ -23,19 +23,36 @@ resource "aws_instance" "app" {
 
   user_data = <<-EOF
               #!/bin/bash
-              yum update -y
-              yum install git -y
-              curl -sL https://rpm.nodesource.com/setup_18.x | bash -
-              yum install nodejs -y
-
-              cd /home/ec2-user
+              set -e
+              
+              # Update system packages
+              apt update -y
+              apt upgrade -y
+              
+              # Install dependencies
+              apt install -y git curl wget
+              
+              # Install Node.js 18
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              apt install -y nodejs
+              
+              # Navigate to home directory and clone repository
+              cd /home/ubuntu
               git clone ${var.repo_url} app
               cd app
-
+              
+              # Install dependencies and start app
               npm install
               npm install -g pm2
+              
+              # Start Node.js app with PM2
               pm2 start npm --name "app" -- start
-              pm2 startup
+              pm2 startup systemd -u ubuntu --hp /home/ubuntu
               pm2 save
+              
+              # Enable PM2 autostart
+              sudo systemctl enable pm2-ubuntu
+              
+              echo "Deployment completed successfully"
               EOF
 }
